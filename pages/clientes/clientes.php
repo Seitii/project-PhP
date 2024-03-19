@@ -30,13 +30,13 @@
         $sql  = "SELECT idCliente, UPPER(nomeCliente) as nomeCliente, LOWER(emailCliente) as emailCliente,telefoneCliente, fotoCliente FROM contatos";
         $rs = mysqli_query($conexao, $sql) or die("Erro na seleção de dados" . mysqli_error($conexao));
         while ($dados = mysqli_fetch_assoc($rs)) {
+            $caminhoFoto = 'pages/clientes/fotos-clientes/' . $dados["fotoCliente"];
+            if($dados["fotoCliente"] == "" || !file_exists($caminhoFoto)){
+                $caminhoFoto = 'pages/clientes/fotos-clientes/semfoto.png';
+            }
             echo '<tr>';
             echo '<td>' . $dados['idCliente'] . '</td>';
-            if (!empty($dados['fotoCliente'])) {
-                echo '<td><img src="data:image/jpeg;base64,' . base64_encode($dados['fotoCliente']) . '" alt="Foto do cliente" style="width: 100px; height: auto;"></td>';
-            } else {
-                echo '<td><img src="pages/clientes/foto-clientes" alt="Sem foto" style="width: 100px; height: auto;"></td>';
-            }
+            echo '<td><img height="50" src="' . htmlspecialchars($caminhoFoto, ENT_QUOTES, 'UTF-8') . '" alt="Foto do Contato"></td>';
             echo '<td>' . htmlspecialchars($dados['nomeCliente'], ENT_QUOTES, 'UTF-8') . '</td>';
             echo '<td>' . htmlspecialchars($dados['emailCliente'], ENT_QUOTES, 'UTF-8') . '</td>';
             echo '<td>' . htmlspecialchars($dados['telefoneCliente'], ENT_QUOTES, 'UTF-8') . '</td>';
